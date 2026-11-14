@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Для Евы ❤️</title>
+<style>
+  :root{
+    --cream:#faf3ea; --cream2:#f3e6d5;
+    --rose:#d4434a; --rose-soft:#e88a8a;
+    --muted:#8a6d5c; --ink:#3d2c2c;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background: radial-gradient(ellipse at 50% 18%, #fff8ee 0%, var(--cream) 45%, var(--cream2) 100%);
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; color:var(--ink); position:relative;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: radial-gradient(circle, rgba(138,109,92,.11) 1px, transparent 1px);
+    background-size:26px 26px;
+  }
+
+  /* ===================== EMOJI SCENE ===================== */
+  .scene{
+    position:relative; z-index:1;
+    width:100%; max-width:580px; height:480px;
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .scene.gone{ opacity:0; transform:scale(.94); pointer-events:none; }
+
+  .char{
+    position:absolute; bottom:70px; left:50%;
+    width:88px; height:88px; margin-left:-44px;
+    transform: translateX(0); opacity:0;
+    transition: transform 1s cubic-bezier(.34,1.15,.4,1), opacity .55s ease;
+    will-change: transform, opacity;
+    user-select:none; -webkit-user-select:none;
+  }
+  .char .body{ display:block; width:100%; height:100%; }
+  .char img{ display:block; width:100%; height:100%;
+    filter: drop-shadow(0 10px 14px rgba(90,55,30,.18)); pointer-events:none; }
+  .char::after{
+    content:""; position:absolute; left:22%; right:22%; bottom:-8px; height:11px;
+    background: radial-gradient(ellipse at center, rgba(80,50,30,.22), transparent 72%);
+    border-radius:50%; z-index:-1;
+  }
+  .guy{ z-index:3; bottom:62px; width:96px; height:96px; margin-left:-48px; opacity:1; }
+  .guy .body{ animation: idle 3.4s ease-in-out infinite; }
+  @keyframes idle{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+  .guy.reject .body{ animation: nope .5s ease-in-out 3; }
+  @keyframes nope{ 0%,100%{transform:rotate(0)} 25%{transform:rotate(-6deg) translateY(-2px)} 75%{transform:rotate(6deg) translateY(-2px)} }
+  .blonde{ transform: translateX(-380px); opacity:0; z-index:2; }
+  .blonde.enter{ transform: translateX(-122px); opacity:1; }
+  .blonde.leave{ transform: translateX(-520px) rotate(-8deg); opacity:0; }
+  .brownhair{ transform: translateX(380px); opacity:0; z-index:2; }
+  .brownhair.enter{ transform: translateX(122px); opacity:1; }
+  .brownhair.enter .body{ animation: hop 1.1s cubic-bezier(.34,1.4,.5,1); }
+  @keyframes hop{ 0%{transform:scale(.88) translateY(6px)} 55%{transform:scale(1.05) translateY(-8px)} 100%{transform:scale(1) translateY(0)} }
+
+  .bubble{
+    position:absolute; bottom:106%; left:50%;
+    transform: translateX(-50%) translateY(8px) scale(.45);
+    transform-origin: bottom center;
+    background:#fff; border-radius:16px; padding:8px 16px;
+    font-size:17px; font-weight:800; color:var(--rose); white-space:nowrap;
+    box-shadow: 0 8px 20px rgba(90,50,25,.16); opacity:0; pointer-events:none;
+    transition: all .32s cubic-bezier(.34,1.56,.64,1);
+  }
+  .bubble::after{
+    content:""; position:absolute; bottom:-7px; left:50%;
+    transform: translateX(-50%);
+    border:8px solid transparent; border-top-color:#fff; border-bottom:0;
+  }
+  .bubble.show{ opacity:1; transform: translateX(-50%) translateY(0) scale(1); }
+
+  .heart{
+    position:absolute; left:50%; top:88px;
+    margin-left:-38px; width:76px; height:76px;
+    cursor:pointer; border:none; background:none; padding:0;
+    opacity:0; transform: scale(0); pointer-events:none;
+    transition: opacity .4s ease, transform .5s cubic-bezier(.34,1.56,.64,1);
+    z-index:6;
+  }
+  .heart img{ display:block; width:100%; height:100%;
+    filter: drop-shadow(0 8px 16px rgba(212,67,74,.38)); pointer-events:none; }
+  .heart.show{ opacity:1; transform: scale(1); pointer-events:auto;
+    animation: beat 1.6s ease-in-out infinite .45s; }
+  @keyframes beat{
+    0%,100%{ transform: scale(1); } 14%{ transform: scale(1.14); }
+    28%{ transform: scale(1); } 44%{ transform: scale(1.09); }
+  }
+  .prompt{
+    position:absolute; left:50%; bottom:14px;
+    transform: translateX(-50%) translateY(12px);
+    font-size:17px; font-weight:700; color:var(--rose-soft);
+    letter-spacing:.02em; white-space:nowrap; opacity:0;
+    transition: all .5s ease;
+  }
+  .prompt.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+  .confession{
+    position:absolute; left:0; right:0; top:16px;
+    text-align:center; z-index:20; opacity:0;
+    transform: translateY(-10px); transition: all .6s ease;
+    pointer-events:none;
+  }
+  .confession.show{ opacity:1; transform:none; }
+  .confession h1{
+    font-size: clamp(26px, 7vw, 40px);
+    font-weight: 700; line-height: 1.2;
+    color: var(--rose); letter-spacing: -.01em;
+  }
+
+  .start-btn{
+    position:absolute; left:50%; bottom:6px;
+    transform: translateX(-50%) translateY(16px);
+    opacity:0; pointer-events:none;
+    border:none; cursor:pointer;
+    background: var(--rose); color:#fff;
+    font-family: inherit; font-weight:700; font-size:17px;
+    padding: 13px 32px; border-radius: 999px;
+    box-shadow: 0 10px 26px rgba(212,67,74,.36);
+    transition: all .45s cubic-bezier(.34,1.4,.5,1);
+    z-index: 21; white-space: nowrap;
+  }
+  .start-btn.show{ opacity:1; pointer-events:auto; transform: translateX(-50%) translateY(0); }
+
+  .confetti{
+    position:absolute; z-index:15; pointer-events:none;
+    opacity:0; line-height:1; will-change: transform, opacity;
+  }
+  .confetti img{ display:block; width:100%; height:auto; }
+  .confetti.fall{ animation: fall 2.7s ease-in forwards; }
+  @keyframes fall{
+    0%{ opacity:1; transform: translateY(0) rotate(0) scale(1); }
+    100%{ opacity:0; transform: translateY(430px) rotate(340deg) scale(.75); }
+  }
+
+  /* ===================== GAME ===================== */
+  #gameScreen{
+    position:fixed; inset:0; z-index:100;
+    display:none; flex-direction:column;
+    align-items:center; justify-content:center;
+    background: radial-gradient(ellipse at center, #1a1420 0%, #08060a 100%);
+    padding: 12px; gap: 8px;
+  }
+  #gameScreen.on{ display:flex; }
+  #gameCanvas{
+    display:block;
+    width: 100%; max-width: 960px;
+    aspect-ratio: 16 / 9;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.06);
+    background:#000;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .game-hint{
+    color:#8a8070; font-size:13px; text-align:center;
+    max-width: 960px; padding: 0 12px; line-height: 1.6;
+  }
+  .game-hint kbd{
+    background:#2a2a3a; color:#ddd;
+    padding: 2px 6px; border-radius: 3px;
+    font-family: monospace; font-size: 11px;
+    border: 1px solid #3a3a4a;
+  }
+  @media (max-width: 600px){
+    .game-hint{ font-size: 11px; }
+  }
+
+  /* Touch controls */
+  .touch-controls{
+    display: none; position: fixed; inset: 0;
+    pointer-events: none; z-index: 110;
+    touch-action: none;
+  }
+  body.game-active.can-touch .touch-controls{ display: block; }
+
+  .touch-controls .dpad{
+    position: absolute; left: 14px; bottom: 14px;
+    width: 132px; height: 132px;
+    pointer-events: auto;
+    touch-action: none;
+    opacity: 0.85;
+  }
+  .touch-controls .dpad button{
+    position: absolute; width: 44px; height: 44px;
+    background: rgba(255,255,255,.22);
+    border: 1px solid rgba(255,255,255,.45);
+    color: #fff; font-size: 18px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    touch-action: none;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .touch-controls .dpad button:active{
+    background: rgba(255,255,255,.45);
+  }
+  .touch-controls .dpad .up   { left: 44px; top: 0; }
+  .touch-controls .dpad .down { left: 44px; top: 88px; }
+  .touch-controls .dpad .left { left: 0; top: 44px; }
+  .touch-controls .dpad .right{ left: 88px; top: 44px; }
+
+  .touch-controls .action{
+    position: absolute; right: 20px; bottom: 34px;
+    width: 78px; height: 78px; border-radius: 50%;
+    background: rgba(212,67,74,.72);
+    border: 2px solid rgba(255,255,255,.55);
+    color: #fff; font-size: 14px; font-weight: 800;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    line-height: 1.1;
+    letter-spacing: .02em;
+    opacity: 0.9;
+    box-shadow: 0 6px 18px rgba(212,67,74,.35);
+  }
+  .touch-controls .action:active{
+    background: rgba(212,67,74,.95);
+    transform: scale(.96);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      transition-duration:.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== EMOJI SCENE ===================== -->
+<div class="scene" id="scene">
+  <div class="char blonde" id="blonde">
+    <span class="body" id="blondeBody">
+      <img alt="блондинка"
+           src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/1f471-1f3fb-200d-2640-fe0f.png">
+    </span>
+  </div>
+
+  <div class="char guy" id="guy">
+    <div class="bubble" id="bubble">не ты…</div>
+    <span class="body">
+      <img alt="Андрей"
+           src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/1f468-1f3fb.png">
+    </span>
+  </div>
+
+  <div class="char brownhair" id="brownhair">
+    <span class="body">
+      <img alt="Ева"
+           src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/1f469-1f3fd.png">
+    </span>
+  </div>
+
+  <button class="heart" id="heart" aria-label="Нажми на сердечко">
+    <img alt="сердце"
+         src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/2764-fe0f.png">
+  </button>
+
+  <div class="prompt" id="prompt">Нажми на сердечко 💕</div>
+
+  <div class="confession" id="confession">
+    <h1>Я тебя люблю, Ева!</h1>
+  </div>
+
+  <button class="start-btn" id="startBtn">Начать игру</button>
+</div>
+
+<!-- ===================== GAME SCREEN ===================== -->
+<div id="gameScreen">
+  <canvas id="gameCanvas" width="400" height="225"></canvas>
+  <div class="game-hint">
+    <kbd>WASD</kbd> / <kbd>↑↓←→</kbd> — идти · <kbd>Space</kbd> — удар · <kbd>E</kbd> — плевать / действие · на телефоне — кнопки внизу
+  </div>
+</div>
+
+<div class="touch-controls" id="touchControls">
+  <div class="dpad">
+    <button class="up"    data-key="w" aria-label="вверх">▲</button>
+    <button class="down"  data-key="s" aria-label="вниз">▼</button>
+    <button class="left"  data-key="a" aria-label="влево">◀</button>
+    <button class="right" data-key="d" aria-label="вправо">▶</button>
+  </div>
+  <button class="action" id="actionBtn" aria-label="действие">УДАР</button>
+</div>
+
+<script>
+/* ============================================================
+   EMOJI SCENE
+   ============================================================ */
+const APPLE = 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/';
+const emo = (c) => APPLE + c + '.png';
+
+const scene      = document.getElementById('scene');
+const blonde     = document.getElementById('blonde');
+const blondeBody = document.getElementById('blondeBody');
+const guy        = document.getElementById('guy');
+const brownhair  = document.getElementById('brownhair');
+const bubble     = document.getElementById('bubble');
+const heartBtn   = document.getElementById('heart');
+const prompt     = document.getElementById('prompt');
+const confession = document.getElementById('confession');
+const startBtn   = document.getElementById('startBtn');
+
+setTimeout(() => blonde.classList.add('enter'), 400);
+setTimeout(() => { guy.classList.add('reject'); bubble.classList.add('show'); }, 1700);
+setTimeout(() => {
+  blonde.classList.remove('enter');
+  blonde.classList.add('leave');
+  blondeBody.querySelector('img').src = emo('1f622');
+  bubble.classList.remove('show');
+}, 3100);
+setTimeout(() => brownhair.classList.add('enter'), 3900);
+setTimeout(() => { heartBtn.classList.add('show'); prompt.classList.add('show'); }, 5000);
+
+let revealed = false;
+function reveal(){
+  if (revealed) return;
+  revealed = true;
+  heartBtn.classList.remove('show');
+  prompt.classList.remove('show');
+  confession.classList.add('show');
+  startBtn.classList.add('show');
+  spawnSceneConfetti();
+}
+heartBtn.addEventListener('click', reveal);
+
+function spawnSceneConfetti(){
+  const items = ['2764-fe0f','1f495','1f496','1f497','1f493','2728'];
+  for (let i = 0; i < 24; i++){
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      const img = document.createElement('img');
+      img.src = emo(items[Math.floor(Math.random() * items.length)]);
+      img.alt = '';
+      el.appendChild(img);
+      el.style.left  = (Math.random() * 100) + '%';
+      el.style.top   = (Math.random() * 25) + '%';
+      el.style.width = (18 + Math.random() * 22) + 'px';
+      scene.appendChild(el);
+      requestAnimationFrame(() => el.classList.add('fall'));
+      setTimeout(() => el.remove(), 2900);
+    }, i * 65);
+  }
+}
+
+/* ============================================================
+   TOUCH DETECTION
+   ============================================================ */
+const isTouchDevice = (
+  'ontouchstart' in window ||
+  navigator.maxTouchPoints > 0 ||
+  window.matchMedia('(pointer: coarse)').matches ||
+  window.innerWidth < 900
+);
+if (isTouchDevice) document.body.classList.add('can-touch');
+
+/* ============================================================
+   PIXEL GAME
+   ============================================================ */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+const W = canvas.width;
+const H = canvas.height;
+
+const keys = {};
+let gameActive = false;
+
+const P = {
+  x: 190, y: 170, w: 16, h: 24,
+  speed: 110, facing: 'up',
+  hp: 5, maxHp: 5,
+  invuln: 0, punchT: 0, spitT: 0,
+  walkAnim: 0, hasFlower: false,
+};
+
+const G = {
+  mode: 'none', t: 0,
+  rain: [], boss: null,
+  projectiles: [], particles: [],
+  camShake: 0, blackout: 0,
+  msg: '', msgT: 0,
+  banner: null,
+  pending: [],
+  shop: null, eva: null,
+};
+
+function initRain(){
+  G.rain = [];
+  for (let i = 0; i < 80; i++){
+    G.rain.push({
+      x: Math.random() * W, y: Math.random() * H,
+      v: 200 + Math.random() * 150,
+      len: 3 + Math.random() * 3,
+    });
+  }
+}
+initRain();
+
+function showMsg(text, dur = 2.4){ G.msg = text; G.msgT = dur; }
+
+function setBanner(line1, line2, opts = {}){
+  const dur = opts.dur || 2.6;
+  G.banner = {
+    l1: line1, l2: line2,
+    color: opts.color || '#e8a838',
+    l2Color: opts.l2Color || '#fff',
+    t: dur, dur,
+  };
+}
+
+function later(sec, fn){ G.pending.push({ t: sec, fn }); }
+
+function setMode(mode){
+  G.mode = mode; G.t = 0;
+  G.projectiles = [];
+  G.particles = [];
+  G.msg = ''; G.msgT = 0;
+  G.banner = null;
+  G.blackout = 0.45;
+  G.pending = [];
+  P.invuln = 0; P.punchT = 0; P.spitT = 0;
+
+  if (mode === 'sochi'){
+    P.x = W/2 - 8; P.y = H - 40;
+    P.hp = P.maxHp;
+    initRain();
+    showMsg('Иди вверх → на Москву', 2.2);
+  } else if (mode === 'denis'){
+    P.x = W/2 - 8; P.y = H - 60;
+    P.hp = P.maxHp;
+    G.boss = {
+      x: W/2 - 12, y: 30, w: 24, h: 32,
+      hp: 8, maxHp: 8, speed: 55,
+      facing: 'down', state: 'idle',
+      spinT: 0, cooldown: 3, hurtFlash: 0,
+      frozenT: 2.6,
+    };
+    setBanner('БОСС: ДЕНИС', 'SPACE — удар кулаком', { color: '#e8a838' });
+  } else if (mode === 'misha'){
+    P.x = W/2 - 8; P.y = H - 60;
+    P.hp = P.maxHp;
+    G.boss = {
+      x: W/2 - 12, y: 50, w: 24, h: 32,
+      facing: 'down', down: false,
+      speechT: 0, fallDelay: 0, fallT: 0,
+      hurtFlash: 0, frozenT: 2.6,
+    };
+    setBanner('БОСС: МИША', 'Самый лёгкий · E — плюнуть', { color: '#6ab06a' });
+  } else if (mode === 'kontik'){
+    P.x = W/2 - 8; P.y = H - 60;
+    P.hp = P.maxHp;
+    G.boss = {
+      x: W/2 - 12, y: 30, w: 24, h: 32,
+      speed: 34, facing: 'down',
+      alive: true, deathT: 0, lookT: 0,
+      frozenT: 2.6,
+    };
+    setBanner('БОСС: КОНТИК', 'НЕЛЬЗЯ СМОТРЕТЬ', {
+      color: '#ff2e3e', l2Color: '#ff2e3e', dur: 3.0
+    });
+  } else if (mode === 'shop'){
+    P.x = 20; P.y = H/2;
+    P.hasFlower = false;
+    G.shop = { x: W - 110, y: H/2 - 50, w: 60, h: 80 };
+    showMsg('Подойди к магазину и нажми E', 3);
+  } else if (mode === 'eva'){
+    P.x = 20; P.y = H/2;
+    G.eva = { x: W - 70, y: H/2 - 12, w: 16, h: 24 };
+  } else if (mode === 'cabrio'){
+    G.banner = null;
+  } else if (mode === 'end'){
+    document.body.classList.add('end-reached');
+  }
+}
+
+function movePlayer(dt){
+  let dx = 0, dy = 0;
+  if (keys['w']) dy -= 1;
+  if (keys['s']) dy += 1;
+  if (keys['a']) dx -= 1;
+  if (keys['d']) dx += 1;
+
+  if (dx || dy){
+    const len = Math.hypot(dx, dy);
+    dx /= len; dy /= len;
+
+    if (Math.abs(dx) > Math.abs(dy)){
+      P.facing = dx > 0 ? 'right' : 'left';
+    } else {
+      P.facing = dy > 0 ? 'down' : 'up';
+    }
+
+    P.x += dx * P.speed * dt;
+    P.y += dy * P.speed * dt;
+
+    P.x = Math.max(0, Math.min(W - P.w, P.x));
+    P.y = Math.max(0, Math.min(H - P.h, P.y));
+
+    P.walkAnim += dt * 14;
+  } else {
+    P.walkAnim *= 0.9;
+  }
+}
+
+function tryPunch(){
+  if (G.mode !== 'denis' || !G.boss || G.boss.hp <= 0) return;
+  if (P.punchT > 0) return;
+  P.punchT = 0.35;
+
+  const b = G.boss;
+  const dx = (b.x + b.w/2) - (P.x + P.w/2);
+  const dy = (b.y + b.h/2) - (P.y + P.h/2);
+  const d = Math.hypot(dx, dy);
+
+  if (d < 44){
+    b.hp--;
+    b.hurtFlash = 0.25;
+    const nd = d || 1;
+    b.x += (dx/nd) * 16;
+    b.y += (dy/nd) * 16;
+    for (let i = 0; i < 6; i++){
+      G.particles.push({
+        x: b.x + b.w/2, y: b.y + b.h/2,
+        vx: (Math.random() - 0.5) * 200,
+        vy: (Math.random() - 0.5) * 200,
+        life: 0.4, maxLife: 0.4,
+        color: '#ffe066', size: 2,
+      });
+    }
+    if (b.hp <= 0){
+      showMsg('Денис повержен!', 1.4);
+      later(1.4, () => setMode('misha'));
+    }
+  }
+}
+
+function tryAction(){
+  if (G.mode === 'misha' && G.boss && !G.boss.down){
+    if (P.spitT > 0) return;
+    P.spitT = 0.5;
+    const dirs = { left: [-1,0], right: [1,0], up: [0,-1], down: [0,1] };
+    const [dx, dy] = dirs[P.facing];
+    G.projectiles.push({
+      x: P.x + P.w/2, y: P.y + P.h/2,
+      vx: dx * 320, vy: dy * 320, life: 1.2,
+    });
+  } else if (G.mode === 'shop'){
+    const s = G.shop;
+    const near = Math.abs(P.x + P.w/2 - (s.x + s.w/2)) < 70
+              && Math.abs(P.y + P.h/2 - (s.y + s.h/2)) < 70;
+    if (near && !P.hasFlower){
+      P.hasFlower = true;
+      showMsg('Цветок куплен! Иди к Еве →', 3);
+    }
+  }
+}
+
+/* ------------------ UPDATE ------------------ */
+function update(dt){
+  G.t += dt;
+  P.invuln = Math.max(0, P.invuln - dt);
+  P.punchT = Math.max(0, P.punchT - dt);
+  P.spitT  = Math.max(0, P.spitT - dt);
+  if (G.msgT > 0) G.msgT -= dt;
+  if (G.camShake > 0) G.camShake -= dt;
+  if (G.blackout > 0) G.blackout -= dt;
+  if (G.banner) G.banner.t -= dt;
+
+  for (let i = G.particles.length - 1; i >= 0; i--){
+    const p = G.particles[i];
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    p.life -= dt;
+    if (p.life <= 0) G.particles.splice(i, 1);
+  }
+
+  for (let i = G.pending.length - 1; i >= 0; i--){
+    G.pending[i].t -= dt;
+    if (G.pending[i].t <= 0){
+      const fn = G.pending[i].fn;
+      G.pending.splice(i, 1);
+      fn();
+    }
+  }
+
+  if (G.mode === 'sochi')  updateSochi(dt);
+  else if (G.mode === 'denis')  updateDenis(dt);
+  else if (G.mode === 'misha')  updateMisha(dt);
+  else if (G.mode === 'kontik') updateKontik(dt);
+  else if (G.mode === 'shop')   updateShop(dt);
+  else if (G.mode === 'eva')    updateEva(dt);
+  else if (G.mode === 'cabrio') updateCabrio(dt);
+}
+
+function updateSochi(dt){
+  movePlayer(dt);
+  for (const r of G.rain){
+    r.y += r.v * dt;
+    r.x -= r.v * 0.15 * dt;
+    if (r.y > H){ r.y = -10; r.x = Math.random() * (W + 40); }
+    if (r.x < -10){ r.x = W + 10; r.y = Math.random() * H; }
+  }
+  if (P.y < 15) setMode('denis');
+}
+
+function updateDenis(dt){
+  const b = G.boss;
+  if (!b) return;
+  movePlayer(dt);
+  b.hurtFlash = Math.max(0, b.hurtFlash - dt);
+
+  if (b.frozenT > 0){ b.frozenT -= dt; return; }
+
+  if (b.state === 'spin'){
+    b.spinT -= dt;
+    if (b.spinT <= 0){ b.state = 'idle'; b.cooldown = 3; }
+  } else {
+    b.cooldown -= dt;
+    if (b.cooldown <= 0){ b.state = 'spin'; b.spinT = 2; }
+  }
+
+  if (b.state === 'idle'){
+    const dx = (P.x + P.w/2) - (b.x + b.w/2);
+    const dy = (P.y + P.h/2) - (b.y + b.h/2);
+    const d = Math.hypot(dx, dy) || 1;
+    b.x += (dx/d) * b.speed * dt;
+    b.y += (dy/d) * b.speed * dt;
+  }
+
+  if (b.state === 'spin' && P.invuln <= 0){
+    const dx = (P.x + P.w/2) - (b.x + b.w/2);
+    const dy = (P.y + P.h/2) - (b.y + b.h/2);
+    const d = Math.hypot(dx, dy);
+    if (d < 50){
+      P.hp--; P.invuln = 1.1; G.camShake = 0.25;
+      if (P.hp <= 0){
+        showMsg('Ой... ещё раз!', 1.6);
+        later(1.4, () => setMode('denis'));
+      }
+    }
+  }
+
+  b.x = Math.max(0, Math.min(W - b.w, b.x));
+  b.y = Math.max(0, Math.min(H - b.h, b.y));
+}
+
+function updateMisha(dt){
+  movePlayer(dt);
+  const b = G.boss;
+  if (!b) return;
+
+  if (b.frozenT > 0){ b.frozenT -= dt; return; }
+
+  if (b.down){
+    b.speechT = Math.max(0, b.speechT - dt);
+    b.fallDelay = Math.max(0, b.fallDelay - dt);
+    b.fallT += dt;
+  }
+
+  for (let i = G.projectiles.length - 1; i >= 0; i--){
+    const p = G.projectiles[i];
+    p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
+
+    if (!b.down && p.x > b.x && p.x < b.x + b.w && p.y > b.y && p.y < b.y + b.h){
+      b.down = true;
+      b.speechT = 2.2;
+      b.fallDelay = 0.7;
+      b.fallT = 0;
+      G.projectiles.splice(i, 1);
+      showMsg('Миша: извините меня...', 2.0);
+      later(2.4, () => setMode('kontik'));
+      continue;
+    }
+    if (p.life <= 0) G.projectiles.splice(i, 1);
+  }
+}
+
+/* --- КОНТИК: идёт к «глазам» игрока --- */
+function updateKontik(dt){
+  movePlayer(dt);
+  const b = G.boss;
+  if (!b) return;
+
+  if (b.alive && b.frozenT > 0){ b.frozenT -= dt; return; }
+
+  if (b.alive){
+    /* точка «взгляда» Андрея — на 34px впереди его лица */
+    const dirs = { left: [-1, 0], right: [1, 0], up: [0, -1], down: [0, 1] };
+    const [fx, fy] = dirs[P.facing];
+    const eyeX = P.x + P.w/2 + fx * 34;
+    const eyeY = P.y + P.h/2 + fy * 34;
+
+    /* Контик летит к точке взгляда */
+    const dx = eyeX - (b.x + b.w/2);
+    const dy = eyeY - (b.y + b.h/2);
+    const d = Math.hypot(dx, dy) || 1;
+
+    if (d > 2){
+      const speed = b.speed + Math.min(20, G.t * 0.4); // чуть ускоряется к концу
+      b.x += (dx/d) * speed * dt;
+      b.y += (dy/d) * speed * dt;
+    }
+
+    b.x = Math.max(0, Math.min(W - b.w, b.x));
+    b.y = Math.max(0, Math.min(H - b.h, b.y));
+
+    /* «Смотришь» = Контик добрался до зоны глаз */
+    const looking = d < 22;
+
+    if (looking){
+      b.lookT += dt;
+      if (b.lookT > 2 && P.invuln <= 0){
+        P.hp--; P.invuln = 1.2; b.lookT = 0;
+        G.camShake = 0.32;
+        /* отбрасываем игрока */
+        const nd = Math.hypot(dx, dy) || 1;
+        P.x -= (dx/nd) * 26;
+        P.y -= (dy/nd) * 26;
+        P.x = Math.max(0, Math.min(W - P.w, P.x));
+        P.y = Math.max(0, Math.min(H - P.h, P.y));
+        if (P.hp <= 0){
+          showMsg('Не смотри! Ещё раз.', 1.6);
+          later(1.4, () => setMode('kontik'));
+          return;
+        }
+      }
+    } else {
+      b.lookT = Math.max(0, b.lookT - dt * 2.5);
+    }
+
+    if (G.t > 60){
+      b.alive = false;
+      b.deathT = 1.4;
+      showMsg('Печенька Контик испёкся!', 1.6);
+    }
+  } else {
+    b.deathT -= dt;
+    if (b.deathT <= 0) setMode('shop');
+  }
+}
+
+function updateShop(dt){
+  movePlayer(dt);
+  if (P.hasFlower && P.x + P.w > W - 30) setMode('eva');
+}
+
+function updateEva(dt){
+  movePlayer(dt);
+  const e = G.eva;
+  const dx = (e.x + e.w/2) - (P.x + P.w/2);
+  const dy = (e.y + e.h/2) - (P.y + P.h/2);
+  if (Math.hypot(dx, dy) < 30 && G.mode === 'eva'){
+    G.mode = 'eva-dialogue';
+    showMsg('— Прости. Я тебя люблю.', 3);
+    later(2.4, () => setMode('cabrio'));
+  }
+}
+
+function updateCabrio(dt){
+  if (G.t > 8) setMode('end');
+}
+
+/* ------------------ RENDER ------------------ */
+function px(x, y, w, h, c){ ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+
+const ANDREY = { skin:'#fde0d0', hair:'#1a1a1a', shirt:'#4a6fa5', pants:'#2a2a3a', shoes:'#1a1a1a' };
+const EVA    = { skin:'#fde0d0', hair:'#5a3a20', shirt:'#9b7bbd', pants:'#4a3a5a', shoes:'#2a1a2a' };
+const DENIS  = { skin:'#fde0d0', hair:'#c87a3a', shirt:'#c84040', pants:'#3a2a2a', shoes:'#1a1a1a' };
+const MISHA  = { skin:'#fde0d0', hair:'#8a6a3a', shirt:'#4a8a4a', pants:'#3a3a3a', shoes:'#1a1a1a' };
+const KONTIK = { skin:'#d4a86a', hair:'#8a5a2a', shirt:'#e8a848', pants:'#6a4a2a', shoes:'#3a2a1a' };
+
+function drawHumanoid(x, y, o, facing, opts = {}){
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath();
+  ctx.ellipse(x + 8, y + 25, 6, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  px(x + 4, y + 18, 3, 6, o.pants);
+  px(x + 9, y + 18, 3, 6, o.pants);
+  px(x + 4, y + 23, 3, 1, o.shoes);
+  px(x + 9, y + 23, 3, 1, o.shoes);
+
+  px(x + 3, y + 10, 10, 9, o.shirt);
+  px(x + 1, y + 11, 2, 7, o.shirt);
+  px(x + 13, y + 11, 2, 7, o.shirt);
+  px(x + 1, y + 17, 2, 2, o.skin);
+  px(x + 13, y + 17, 2, 2, o.skin);
+
+  px(x + 4, y + 2, 8, 8, o.skin);
+  if (facing === 'up'){
+    px(x + 3, y + 1, 10, 9, o.hair);
+  } else {
+    px(x + 3, y + 1, 10, 3, o.hair);
+    px(x + 3, y + 3, 1, 3, o.hair);
+    px(x + 12, y + 3, 1, 3, o.hair);
+  }
+  if (facing === 'down'){
+    px(x + 6, y + 6, 1, 1, '#111');
+    px(x + 9, y + 6, 1, 1, '#111');
+  } else if (facing === 'left'){
+    px(x + 5, y + 6, 1, 1, '#111');
+  } else if (facing === 'right'){
+    px(x + 10, y + 6, 1, 1, '#111');
+  }
+
+  if (opts.punching){
+    const fpx = facing === 'left' ? x - 6 : facing === 'right' ? x + 16 : x + 8;
+    const fpy = facing === 'up' ? y + 4 : facing === 'down' ? y + 16 : y + 12;
+    px(fpx, fpy, 4, 4, o.skin);
+  }
+
+  if (opts.flower){
+    px(x + 15, y + 8, 1, 7, '#4a8a3a');
+    px(x + 14, y + 6, 3, 3, '#e8557a');
+    px(x + 15, y + 7, 1, 1, '#ffd44a');
+  }
+}
+
+function drawPlayerHearts(){
+  for (let i = 0; i < P.maxHp; i++){
+    const filled = i < P.hp;
+    if (filled){
+      px(8 + i * 11, H - 18, 4, 4, '#e8557a');
+      px(9 + i * 11, H - 20, 2, 2, '#e8557a');
+      px(11 + i * 11, H - 20, 2, 2, '#e8557a');
+      px(10 + i * 11, H - 16, 4, 2, '#e8557a');
+    } else {
+      px(8 + i * 11, H - 18, 8, 8, 'rgba(255,255,255,.12)');
+    }
+  }
+}
+
+function drawHPBar(x, y, w, h, ratio, color, label){
+  px(x, y, w, h, 'rgba(0,0,0,.65)');
+  px(x + 1, y + 1, (w - 2) * Math.max(0, ratio), h - 2, color);
+  if (label){
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(label, x, y - 3);
+  }
+}
+
+function renderBanner(){
+  if (!G.banner || G.banner.t <= 0) return;
+  const b = G.banner;
+  const p = 1 - b.t / b.dur;
+  let alpha = 1;
+  if (p < 0.12) alpha = p / 0.12;
+  else if (p > 0.85) alpha = (1 - p) / 0.15;
+
+  ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+
+  px(0, H/2 - 44, W, 88, 'rgba(0,0,0,.88)');
+  px(0, H/2 - 44, W, 2, b.color);
+  px(0, H/2 + 42, W, 2, b.color);
+
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 22px monospace';
+  ctx.fillStyle = b.color;
+  ctx.shadowColor = b.color;
+  ctx.shadowBlur = 14;
+  ctx.fillText(b.l1, W/2, H/2 - 8);
+  ctx.shadowBlur = 0;
+
+  ctx.font = 'bold 12px monospace';
+  ctx.fillStyle = b.l2Color;
+  ctx.fillText(b.l2, W/2, H/2 + 18);
+
+  ctx.globalAlpha = 1;
+}
+
+function renderHUD(){
+  ctx.save();
+
+  if (G.mode === 'denis' && G.boss){
+    drawHPBar(8, 14, 130, 9, G.boss.hp / G.boss.maxHp, '#d4434a', 'ДЕНИС');
+    drawPlayerHearts();
+  } else if (G.mode === 'kontik' && G.boss){
+    px(W/2 - 72, 6, 144, 20, 'rgba(0,0,0,.7)');
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('ОТВЕРНИСЬ: ' + Math.max(0, 60 - G.t).toFixed(1) + 'с', W/2, 20);
+
+    if (G.boss.lookT > 0.3){
+      const a = Math.min(1, G.boss.lookT / 2);
+      ctx.fillStyle = 'rgba(255,46,62,' + a + ')';
+      ctx.font = 'bold 15px monospace';
+      ctx.fillText('НЕ СМОТРИ!', W/2, 46);
+    }
+    drawPlayerHearts();
+  } else if (G.mode === 'misha' || G.mode === 'shop' || G.mode === 'eva' || G.mode === 'eva-dialogue'){
+    drawPlayerHearts();
+  }
+
+  if (G.msgT > 0 && G.msg){
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center';
+    const tw = ctx.measureText(G.msg).width;
+    px(W/2 - tw/2 - 12, H - 44, tw + 24, 22, 'rgba(0,0,0,.75)');
+    ctx.fillStyle = '#fff';
+    ctx.fillText(G.msg, W/2, H - 28);
+  }
+
+  ctx.restore();
+}
+
+function renderSochi(){
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#3a4a5a'); g.addColorStop(0.55, '#6a7a8a'); g.addColorStop(1, '#8a9aa8');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = 'rgba(30,40,50,.35)';
+  for (let i = 0; i < 5; i++){
+    const cx = ((i * 90) + G.t * 8) % (W + 80) - 40;
+    const cy = 18 + i * 9;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.arc(cx + 14, cy - 4, 11, 0, Math.PI * 2);
+    ctx.arc(cx + 26, cy, 13, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  for (let i = 0; i < 8; i++){
+    const bx = (i * 55) - (G.t * 3) % 55;
+    const bh = 40 + (i * 13) % 30;
+    px(bx, H - 40 - bh, 30, bh, '#3a4a5a');
+    for (let wy = H - 40 - bh + 5; wy < H - 45; wy += 8){
+      for (let wx = bx + 4; wx < bx + 26; wx += 7){
+        if ((wx + wy + i) % 5 < 2) px(wx, wy, 2, 3, 'rgba(255,220,120,.4)');
+      }
+    }
+  }
+
+  px(0, H - 40, W, 40, '#3a4a3a');
+  px(0, H - 40, W, 2, '#2a3a2a');
+  px(70, H - 26, 30, 3, 'rgba(150,180,200,.4)');
+  px(230, H - 22, 20, 2, 'rgba(150,180,200,.4)');
+  px(320, H - 28, 26, 3, 'rgba(150,180,200,.4)');
+
+  px(W/2 - 46, 6, 92, 20, 'rgba(255,255,255,.92)');
+  ctx.fillStyle = '#2a3a4a';
+  ctx.font = 'bold 9px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('→ НА МОСКВУ →', W/2, 19);
+
+  drawHumanoid(P.x, P.y + Math.sin(P.walkAnim) * 1, ANDREY, P.facing);
+
+  ctx.strokeStyle = 'rgba(200,220,255,.6)';
+  ctx.lineWidth = 1;
+  for (const r of G.rain){
+    ctx.beginPath();
+    ctx.moveTo(r.x, r.y);
+    ctx.lineTo(r.x - 2, r.y + r.len);
+    ctx.stroke();
+  }
+}
+
+function renderDenis(){
+  px(0, 0, W, H, '#2a2030');
+  px(0, H - 40, W, 40, '#4a3a2a');
+  px(0, H - 40, W, 2, '#3a2a1a');
+  for (let x = 0; x < W; x += 12) px(x, H - 44, 2, 4, '#6a5a4a');
+
+  const b = G.boss;
+  if (b){
+    if (b.hurtFlash > 0){
+      px(b.x, b.y, b.w, b.h, '#fff');
+    }
+    if (b.state === 'spin'){
+      ctx.save();
+      ctx.translate(b.x + 12, b.y + 16);
+      ctx.rotate(G.t * 22);
+      px(-16, -3, 32, 6, '#c84040');
+      px(-2, -8, 4, 16, '#fde0d0');
+      ctx.restore();
+    } else {
+      drawHumanoid(b.x, b.y, DENIS, b.facing);
+    }
+  }
+
+  drawHumanoid(P.x, P.y, ANDREY, P.facing, { punching: P.punchT > 0.18 });
+
+  for (const p of G.particles){
+    ctx.globalAlpha = p.life / p.maxLife;
+    px(p.x, p.y, p.size, p.size, p.color);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function renderMisha(){
+  px(0, 0, W, H, '#2a3040');
+  px(0, H - 40, W, 40, '#4a4040');
+
+  const b = G.boss;
+  if (b){
+    if (b.down && b.fallDelay <= 0){
+      const rot = Math.min(1, b.fallT * 3);
+      ctx.save();
+      ctx.translate(b.x + 8, b.y + 12);
+      ctx.rotate(Math.PI / 2 * rot);
+      ctx.translate(-(b.x + 8), -(b.y + 12));
+      drawHumanoid(b.x, b.y, MISHA, 'left');
+      ctx.restore();
+    } else {
+      drawHumanoid(b.x, b.y, MISHA, 'down');
+    }
+
+    /* пузырь «извините меня» */
+    if (b.down && b.speechT > 0){
+      const txt = 'извините меня';
+      ctx.font = 'bold 8px monospace';
+      ctx.textAlign = 'center';
+      const tw = ctx.measureText(txt).width;
+      const bx = b.x + b.w/2 - tw/2 - 6;
+      const by = b.y - 22;
+      px(bx, by, tw + 12, 14, '#fff');
+      px(b.x + b.w/2 - 3, by + 14, 6, 3, '#fff');
+      ctx.fillStyle = '#333';
+      ctx.fillText(txt, b.x + b.w/2, by + 10);
+    }
+  }
+
+  drawHumanoid(P.x, P.y, ANDREY, P.facing);
+
+  for (const pr of G.projectiles){
+    px(pr.x - 1, pr.y - 1, 3, 3, '#a8e0a8');
+    px(pr.x, pr.y, 1, 1, '#dfffdf');
+  }
+
+  drawPlayerHearts();
+}
+
+function renderKontik(){
+  px(0, 0, W, H, '#3a2a4a');
+  px(0, H - 40, W, 40, '#2a1a3a');
+
+  const b = G.boss;
+  if (b){
+    if (b.alive){
+      drawHumanoid(b.x, b.y, KONTIK, 'down');
+      px(b.x + 3, b.y + 3, 10, 8, '#c87a3a');
+      px(b.x + 4, b.y + 2, 8, 1, '#8a5a2a');
+      px(b.x + 4, b.y + 11, 8, 1, '#8a5a2a');
+      px(b.x + 5, b.y + 6, 2, 2, '#111');
+      px(b.x + 9, b.y + 6, 2, 2, '#111');
+      px(b.x + 7, b.y + 9, 2, 1, '#3a1a0a');
+    } else {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, b.deathT / 1.4);
+      drawHumanoid(b.x, b.y, KONTIK, 'left');
+      ctx.restore();
+    }
+  }
+
+  drawHumanoid(P.x, P.y, ANDREY, P.facing);
+
+  /* предупреждение о взгляде */
+  if (b && b.alive && b.lookT > 0.3){
+    const a = Math.min(0.95, b.lookT / 2);
+    ctx.strokeStyle = 'rgba(255,46,62,' + a + ')';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, 2, W - 4, H - 4);
+  }
+
+  px(W/2 - 72, 6, 144, 20, 'rgba(0,0,0,.7)');
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ОТВЕРНИСЬ: ' + Math.max(0, 60 - G.t).toFixed(1) + 'с', W/2, 20);
+
+  if (b && b.lookT > 0.3){
+    const a = Math.min(1, b.lookT / 2);
+    ctx.fillStyle = 'rgba(255,46,62,' + a + ')';
+    ctx.font = 'bold 15px monospace';
+    ctx.fillText('НЕ СМОТРИ!', W/2, 46);
+  }
+
+  drawPlayerHearts();
+}
+
+function renderShop(){
+  px(0, 0, W, H, '#5a4a3a');
+  px(0, H - 50, W, 50, '#4a3a2a');
+  px(0, H - 50, W, 2, '#3a2a1a');
+
+  const s = G.shop;
+  px(s.x, s.y, s.w, s.h, '#8a6a3a');
+  ctx.fillStyle = '#d4434a';
+  ctx.beginPath();
+  ctx.moveTo(s.x - 5, s.y);
+  ctx.lineTo(s.x + s.w + 5, s.y);
+  ctx.lineTo(s.x + s.w - 5, s.y - 15);
+  ctx.lineTo(s.x + 5, s.y - 15);
+  ctx.closePath();
+  ctx.fill();
+  px(s.x + 22, s.y + 50, 18, 30, '#3a2a1a');
+  px(s.x + 8, s.y + 15, 12, 12, '#ffd44a');
+  px(s.x + 40, s.y + 15, 12, 12, '#ffd44a');
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 7px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ЦВЕТЫ', s.x + s.w/2, s.y - 20);
+
+  drawHumanoid(P.x, P.y, ANDREY, P.facing, { flower: P.hasFlower });
+}
+
+function renderEva(){
+  px(0, 0, W, H, '#4a3a5a');
+  px(0, H - 40, W, 40, '#3a2a3a');
+
+  for (let i = 0; i < 4; i++){
+    const hx = 100 + i * 60;
+    const hy = 40 + Math.sin(G.t * 2 + i) * 6;
+    px(hx, hy + 1, 2, 1, '#e8557a');
+    px(hx + 1, hy, 1, 1, '#e8557a');
+    px(hx + 2, hy, 1, 1, '#e8557a');
+    px(hx + 1, hy + 2, 2, 1, '#e8557a');
+  }
+
+  drawHumanoid(G.eva.x, G.eva.y, EVA, 'left');
+  drawHumanoid(P.x, P.y, ANDREY, P.facing, { flower: true });
+}
+
+function renderCabrio(){
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#1a1a3a'); g.addColorStop(0.5, '#3a2a4a'); g.addColorStop(1, '#2a1a2a');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  for (let i = 0; i < 40; i++){
+    const x = (i * 53 + G.t * 12) % W;
+    const y = (i * 17) % (H * 0.35) + 5;
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.3 + (i % 3) * 0.2) + ')';
+    ctx.fillRect(x, y, 1, 1);
+  }
+
+  const baseY = H - 60;
+  for (let i = 0; i < 16; i++){
+    const bw = 30 + (i * 11) % 22;
+    const bh = 40 + (i * 17) % 70;
+    const bx = ((i * 45) - G.t * 60) % (W + 120) - 60;
+    px(bx, baseY - bh, bw, bh, i % 2 ? '#1a1020' : '#251828');
+    for (let wy = baseY - bh + 5; wy < baseY - 5; wy += 6){
+      for (let wx = bx + 3; wx < bx + bw - 3; wx += 5){
+        if ((wx + wy + i) % 7 < 2) px(wx, wy, 2, 2, '#ffd44a');
+      }
+    }
+  }
+
+  px(0, baseY, W, H - baseY, '#1a0a1a');
+
+  const cx = W/2 - 40;
+  const cy = baseY - 12;
+  px(cx, cy + 8, 80, 14, '#d4434a');
+  px(cx + 10, cy, 60, 10, '#d4434a');
+
+  ctx.fillStyle = '#111';
+  ctx.beginPath(); ctx.arc(cx + 16, cy + 22, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + 64, cy + 22, 6, 0, Math.PI * 2); ctx.fill();
+  px(cx + 14, cy + 20, 4, 4, '#aaa');
+  px(cx + 62, cy + 20, 4, 4, '#aaa');
+  px(cx + 78, cy + 10, 3, 3, '#fff8a0');
+
+  px(cx + 20, cy - 8, 8, 8, '#fde0d0');
+  px(cx + 20, cy - 8, 8, 3, '#1a1a1a');
+  px(cx + 45, cy - 8, 8, 8, '#fde0d0');
+  px(cx + 45, cy - 8, 8, 3, '#5a3a20');
+  px(cx + 45, cy - 5, 2, 6, '#5a3a20');
+  px(cx + 51, cy - 5, 2, 6, '#5a3a20');
+
+  for (let i = 0; i < 5; i++){
+    const t = (G.t + i * 0.4) % 3;
+    const hx = cx + 30 + Math.sin(t * 2 + i) * 18;
+    const hy = cy - 20 - t * 14;
+    const a = Math.max(0, 1 - t / 3);
+    ctx.globalAlpha = a;
+    px(hx, hy + 1, 2, 1, '#ff5577');
+    px(hx + 1, hy, 1, 1, '#ff5577');
+    px(hx + 2, hy, 1, 1, '#ff5577');
+    px(hx + 1, hy + 2, 2, 1, '#ff5577');
+  }
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = 'rgba(255,255,255,.6)';
+  ctx.font = 'bold 8px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('МОСКВА · СИТИ', W/2, 15);
+}
+
+function renderEnd(){
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#1a1a3a'); g.addColorStop(0.5, '#3a1a2a'); g.addColorStop(1, '#2a0a1a');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  for (let i = 0; i < 22; i++){
+    const t = (G.t * 0.5 + i * 0.3) % 4;
+    const hx = (i * 43) % W;
+    const hy = H - t * 55;
+    const a = Math.sin(t / 4 * Math.PI);
+    ctx.globalAlpha = Math.max(0, a);
+    px(hx, hy + 1, 3, 1, '#ff5577');
+    px(hx + 1, hy, 1, 1, '#ff5577');
+    px(hx + 2, hy, 1, 1, '#ff5577');
+    px(hx + 1, hy + 2, 2, 1, '#ff5577');
+  }
+  ctx.globalAlpha = 1;
+
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 20px monospace';
+  const pulse = 1 + Math.sin(G.t * 3) * 0.05;
+  ctx.save();
+  ctx.translate(W/2, H/2 - 6);
+  ctx.scale(pulse, pulse);
+  ctx.fillStyle = '#fff';
+  ctx.fillText('ЛЮБЛЮ ТЕБЯ ЕВА', 0, 0);
+  ctx.restore();
+
+  ctx.font = 'bold 11px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,.6)';
+  ctx.fillText('❤ 2026 ❤', W/2, H/2 + 24);
+
+  ctx.font = '9px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,.4)';
+  ctx.fillText('обнови страницу, чтобы сыграть снова', W/2, H - 12);
+}
+
+function render(){
+  ctx.save();
+  let sx = 0, sy = 0;
+  if (G.camShake > 0){
+    sx = (Math.random() - 0.5) * 5;
+    sy = (Math.random() - 0.5) * 5;
+  }
+  ctx.translate(sx, sy);
+
+  if (G.mode === 'sochi')  renderSochi();
+  else if (G.mode === 'denis')  renderDenis();
+  else if (G.mode === 'misha')  renderMisha();
+  else if (G.mode === 'kontik') renderKontik();
+  else if (G.mode === 'shop')   renderShop();
+  else if (G.mode === 'eva' || G.mode === 'eva-dialogue') renderEva();
+  else if (G.mode === 'cabrio') renderCabrio();
+  else if (G.mode === 'end')    renderEnd();
+  else { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
+
+  ctx.restore();
+
+  renderHUD();
+  renderBanner();
+
+  if (G.blackout > 0){
+    ctx.fillStyle = 'rgba(0,0,0,' + (G.blackout / 0.45) + ')';
+    ctx.fillRect(0, 0, W, H);
+  }
+}
+
+let lastT = performance.now();
+function loop(t){
+  const dt = Math.min(0.05, (t - lastT) / 1000);
+  lastT = t;
+  if (gameActive){
+    update(dt);
+    render();
+    updateActionLabel();
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ------------------ INPUT ------------------ */
+const keyMap = {
+  KeyW: 'w', KeyA: 'a', KeyS: 's', KeyD: 'd',
+  ArrowUp: 'w', ArrowDown: 's', ArrowLeft: 'a', ArrowRight: 'd',
+  Space: ' ', KeyE: 'e',
+};
+
+window.addEventListener('keydown', e => {
+  if (!gameActive) return;
+  const k = keyMap[e.code];
+  if (k){
+    e.preventDefault();
+    if (k === ' ' && !keys[' ']) tryPunch();
+    if (k === 'e' && !keys['e']) tryAction();
+    keys[k] = true;
+  }
+});
+window.addEventListener('keyup', e => {
+  const k = keyMap[e.code];
+  if (k) keys[k] = false;
+});
+
+/* touch (with pointer capture — надёжно на iOS/Android) */
+document.querySelectorAll('.touch-controls .dpad button').forEach(btn => {
+  const k = btn.dataset.key;
+  const down = e => {
+    e.preventDefault();
+    try { btn.setPointerCapture(e.pointerId); } catch(_) {}
+    keys[k] = true;
+  };
+  const up = e => { keys[k] = false; };
+  btn.addEventListener('pointerdown', down);
+  btn.addEventListener('pointerup', up);
+  btn.addEventListener('pointercancel', up);
+  btn.addEventListener('lostpointercapture', up);
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+});
+
+const actionBtn = document.getElementById('actionBtn');
+actionBtn.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  try { actionBtn.setPointerCapture(e.pointerId); } catch(_) {}
+  if (G.mode === 'denis') tryPunch();
+  else tryAction();
+});
+actionBtn.addEventListener('contextmenu', e => e.preventDefault());
+
+/* обновляем лейбл на кнопке в зависимости от режима */
+let lastActionLabel = '';
+function updateActionLabel(){
+  let label = 'A';
+  if (G.mode === 'denis') label = 'УДАР';
+  else if (G.mode === 'misha') label = 'ПЛЮНУТЬ';
+  else if (G.mode === 'shop') label = 'ВЗЯТЬ';
+  else if (G.mode === 'kontik') label = '⋯';
+  else if (G.mode === 'eva') label = '⋯';
+  if (label !== lastActionLabel){
+    actionBtn.textContent = label;
+    lastActionLabel = label;
+  }
+}
+
+/* ------------------ START ------------------ */
+function startPixelGame(){
+  scene.classList.add('gone');
+  setTimeout(() => { scene.style.display = 'none'; }, 500);
+
+  const gameScreen = document.getElementById('gameScreen');
+  gameScreen.classList.add('on');
+  document.body.classList.add('game-active');
+
+  gameActive = true;
+  setMode('sochi');
+}
+
+startBtn.addEventListener('click', startPixelGame);
+requestAnimationFrame(loop);
+</script>
+
+</body>
+</html>
